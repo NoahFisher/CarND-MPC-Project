@@ -55,23 +55,25 @@ class FG_eval {
     // the coefficients determine the attention to pay to each error term
     for (int i = 0; i < N; i++) {
       // cross track error
-      fg[0] += 2000*CppAD::pow(vars[cte_start + i], 2);
-      // error psi
-      fg[0] += 2000*CppAD::pow(vars[epsi_start + i], 2);
+      fg[0] += 1000*CppAD::pow(vars[cte_start + i], 2);
+      // error psi (angle of the car)
+      fg[0] += 1000*CppAD::pow(vars[epsi_start + i], 2);
       // speed
       fg[0] += 1*CppAD::pow(vars[v_start + i] - ref_v, 2);
     }
 
     // Minimize the use of actuators.
     for (int i = 0; i < N - 1; i++) {
+      // steering target
       fg[0] += 5*CppAD::pow(vars[delta_start + i], 2);
+      // acceleration / throttle target
       fg[0] += 5*CppAD::pow(vars[a_start + i], 2);
     }
 
     // Minimize the value gap between sequential actuations.
     for (int i = 0; i < N - 2; i++) {
       // how smooth the steering angle is
-      fg[0] += 1000*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
+      fg[0] += 100*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
       fg[0] += 10*CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
     }
 

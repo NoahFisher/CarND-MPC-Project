@@ -116,6 +116,7 @@ int main() {
             ptsy_car[i] = y * cospsi - x * sinpsi;
           }
 
+
           /*
            * 4. fit polynomial to our waypoints to get coefficients
            */
@@ -126,13 +127,13 @@ int main() {
            */
           const double latency = 0.1;
           double steer_value = j[1]["steering_angle"];
-          px += v * latency;
-          psi += -v * steer_value / mpc.Lf * latency;
+          // px += v * latency;
+          // psi += -v * steer_value / mpc.Lf * latency;
           double cte = polyeval(coeffs, 0);
           double epsi = -atan(coeffs[1]);
 
           Eigen::VectorXd state(6);
-          // state << px, 0, psi, v, cte, epsi;
+          // state << px, py, psi, v, cte, epsi;
           // TODO: not accounting for latency
           state << 0, 0, 0, v, cte, epsi;
 
@@ -155,14 +156,9 @@ int main() {
            * 8. Predicted Path
            */
 
-          // Green Line
+          // Green Line, predicted path
           vector<double> mpc_x_vals;
           vector<double> mpc_y_vals;
-
-          // for(int i = 0; i < ptsx_car.size(); i++) {
-          //   mpc_x_vals.push_back(ptsx_car[i]);
-          //   mpc_y_vals.push_back(polyeval(coeffs, ptsx_car[i]));
-          // }
 
           for(int i = 0; i < solution.size(); i++) {
             if(i % 2 == 0) {
@@ -179,14 +175,9 @@ int main() {
            * 9. Way points for simulator
            */
 
-          // Yellow Line
+          // Yellow Line, target path
           vector<double> next_x_vals;
           vector<double> next_y_vals;
-
-          // for(int i = 0; i < ptsx_car.size(); i++) {
-          //   next_x_vals.push_back(ptsx_car[i]);
-          //   next_y_vals.push_back(ptsy_car[i]);
-          // }
 
           double poly_inc = 2.5;
           int num_points = 25;
