@@ -12,7 +12,6 @@ class MPC {
 
   double throttle;
   double steering_angle;
-  double Lf;
 
   virtual ~MPC();
 
