@@ -3,3 +3,5 @@ build
 tags
 .editorconfig
 .DS_Store
+
+src/Eigen-3.3/**/*
